@@ -1,0 +1,84 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module SRBF_package ! in 
+
+    interface  ! in :SRBF_package
+
+        module vartypes ! in :SRBF_package:vartypes.f95
+            integer, parameter,optional :: dp=kind(1.d0)
+        end module vartypes
+
+        module constants ! in :SRBF_package:constants.f95
+            use vartypes
+            real(kind=8), parameter,optional :: pi=3.14159265358979324_dp
+        end module constants
+
+        subroutine srbfs_synthesis(lati,loni,ri,npi,lat,lon,r,np,nmin,nmax,a,phisrbf,nphisrbf,radius,psimax,v,vx,vy,vz,vxx,vxy,vxz,vyy,vyz,vzz) ! in :SRBF_package:SRBFs_synthesis.f95
+            use vartypes
+            use constants
+            real(kind=8) dimension(npi),intent(in) :: lati
+            real(kind=8) dimension(npi),intent(in),depend(npi) :: loni
+            real(kind=8) intent(in) :: ri
+            integer, optional,intent(in),check(len(lati)>=npi),depend(lati) :: npi=len(lati)
+            real(kind=8) dimension(np),intent(in) :: lat
+            real(kind=8) dimension(np),intent(in),depend(np) :: lon
+            real(kind=8) dimension(np),intent(in),depend(np) :: r
+            integer, optional,intent(in),check(len(lat)>=np),depend(lat) :: np=len(lat)
+            integer intent(in) :: nmin
+            integer intent(in) :: nmax
+            real(kind=8) dimension(npi),intent(in),depend(npi) :: a
+            real(kind=8) dimension(nphisrbf),intent(in) :: phisrbf
+            integer, optional,intent(in),check(len(phisrbf)>=nphisrbf),depend(phisrbf) :: nphisrbf=len(phisrbf)
+            real(kind=8) intent(in) :: radius
+            real(kind=8) intent(in) :: psimax
+            real(kind=8) dimension(np),intent(out),depend(np) :: v
+            real(kind=8) dimension(np),intent(out),depend(np) :: vx
+            real(kind=8) dimension(np),intent(out),depend(np) :: vy
+            real(kind=8) dimension(np),intent(out),depend(np) :: vz
+            real(kind=8) dimension(np),intent(out),depend(np) :: vxx
+            real(kind=8) dimension(np),intent(out),depend(np) :: vxy
+            real(kind=8) dimension(np),intent(out),depend(np) :: vxz
+            real(kind=8) dimension(np),intent(out),depend(np) :: vyy
+            real(kind=8) dimension(np),intent(out),depend(np) :: vyz
+            real(kind=8) dimension(np),intent(out),depend(np) :: vzz
+        end subroutine srbfs_synthesis
+
+        subroutine srbfs_analysis(lativ,loniv,t,radius,nmax,lati,loni,a) ! in :SRBF_package:SRBFs_analysis.f95
+            use vartypes
+            use constants
+            real(kind=8) dimension(2 * nmax + 3),intent(in) :: lativ
+            real(kind=8) dimension(2 * nmax + 2),intent(in),depend(nmax) :: loniv
+            real(kind=8) dimension(2 * nmax + 3,2 * nmax + 2),intent(in),depend(nmax,nmax) :: t
+            real(kind=8) intent(in) :: radius
+            integer, optional,intent(in),check((len(lativ)-3)/(2)>=nmax),depend(lativ) :: nmax=(len(lativ)-3)/(2)
+            real(kind=8) dimension((2*(nmax+1)+1)*(2*(nmax+1))),intent(out),depend(nmax) :: lati
+            real(kind=8) dimension((2*(nmax+1)+1)*(2*(nmax+1))),intent(out),depend(nmax) :: loni
+            real(kind=8) dimension((2*(nmax+1)+1)*(2*(nmax+1))),intent(out),depend(nmax) :: a
+        end subroutine srbfs_analysis
+
+        subroutine sph2cart(lon,lat,n,x,y,z) ! in :SRBF_package:sph2cart.f95
+            use vartypes
+            use constants
+            real(kind=8) dimension(n),intent(in) :: lon
+            real(kind=8) dimension(n),intent(in),depend(n) :: lat
+            integer, optional,intent(in),check(len(lon)>=n),depend(lon) :: n=len(lon)
+            real(kind=8) dimension(n),intent(out),depend(n) :: x
+            real(kind=8) dimension(n),intent(out),depend(n) :: y
+            real(kind=8) dimension(n),intent(out),depend(n) :: z
+        end subroutine sph2cart
+
+        subroutine dh_grid(nmax,lati,loni) ! in :SRBF_package:DH_grid.f95
+            use vartypes
+            use constants
+            integer intent(in) :: nmax
+            real(kind=8) dimension(2 * nmax + 3),intent(out),depend(nmax) :: lati
+            real(kind=8) dimension(2 * nmax + 2),intent(out),depend(nmax) :: loni
+        end subroutine dh_grid
+
+    end interface 
+
+end python module SRBF_package
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
