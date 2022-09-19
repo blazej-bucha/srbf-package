@@ -56,7 +56,7 @@ paper.
 * [GrafLab](https://github.com/blazej-bucha/graflab) (GRAvity Field
   LABoratory): GrafLab (GRAvity Field LABoratory) is a MATLAB-based routine to
   compute functionals of the geopotential up to high degrees (tens of thousands
-  and beyond)..
+  and beyond).
 
 * [isGrafLab](https://github.com/blazej-bucha/isgraflab) (Irregular Surface
   GRAvity Field LABoratory): A modified version of GrafLab to perform accurate
